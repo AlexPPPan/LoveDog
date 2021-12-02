@@ -6,9 +6,7 @@ import com.getkeepsafe.relinker.ReLinker;
 import com.homework.lovedog.http.RxHttpRequest;
 import com.tencent.mmkv.MMKV;
 
-/**
- * @author tianbin.
- */
+
 
 public class MyApp extends Application {
 
