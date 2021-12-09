@@ -1,8 +1,5 @@
 package com.homework.lovedog.service;
 
-/**
- * @author tianbin.
- */
 
 interface IService {
 

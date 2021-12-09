@@ -11,10 +11,6 @@ import com.leaf.library.StatusBarUtil;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 
-/**
- * @author tianbin.
- */
-
 class SplashActivity extends BaseActivity {
     @Override
     protected int fragmentLayoutId() {
