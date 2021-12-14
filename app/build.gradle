@@ -1,5 +1,7 @@
 plugins {
     id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -62,6 +64,10 @@ dependencies {
     implementation('io.reactivex.rxjava2:rxjava:2.2.8')
     implementation('com.google.code.gson:gson:2.8.6')
     implementation('com.ruffian.library:RWidgetHelper-AndroidX:0.0.9')
-    implementation 'com.github.zhpanvip:bannerviewpager:3.5.4'
+//    implementation 'com.github.zhpanvip:bannerviewpager:3.5.4'
     implementation 'com.github.Ye-Miao:StatusBarUtil:1.7.5'
+}
+
+kapt {
+    generateStubs = true
 }

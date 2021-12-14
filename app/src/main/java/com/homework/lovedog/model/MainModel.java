@@ -2,8 +2,8 @@ package com.homework.lovedog.model;
 
 
 import com.homework.lovedog.base.BaseModel;
-import com.homework.lovedog.base.BaseRsp;
-import com.homework.lovedog.bean.RspDogListByKeyword;
+import com.homework.lovedog.bean.RspDogDetailInfo;
+import com.homework.lovedog.bean.RspDogList;
 import com.homework.lovedog.service.IService;
 import com.rxjava.rxlife.RxLife;
 
@@ -16,14 +16,38 @@ public class MainModel  extends BaseModel {
         super(lifecycleOwner);
     }
 
-    public void dogDetail(int page, int pageSize, String keyword, Consumer<RspDogListByKeyword> onNext, Consumer<Throwable> onError){
-        RxHttp.postForm(IService.DOG_API)
+    public void queryDogListByKeyword(int page, int pageSize, String keyword, Consumer<RspDogList> onNext, Consumer<Throwable> onError){
+        RxHttp.postForm(IService.QUERY_DOG_LIST_BY_KEYWORD)
             .add("apiKey",IService.API_KEY)
             .add("page",page)
             .add("pageSize",pageSize)
             .add("keyword",keyword)
-            .asObject(RspDogListByKeyword.class)
+            .asObject(RspDogList.class)
             .as(RxLife.asOnMain(mLifecycleOwner))
             .subscribe(onNext,onError);
     }
+
+    public void queryDogList(int page, int pageSize,Consumer<RspDogList> onNext,
+                             Consumer<Throwable> onError){
+        RxHttp.postForm(IService.QUERY_DOG_LIST)
+            .add("apiKey",IService.API_KEY)
+            .add("page",page)
+            .add("pageSize",pageSize)
+            .asObject(RspDogList.class)
+            .as(RxLife.asOnMain(mLifecycleOwner))
+            .subscribe(onNext,onError);
+    }
+
+
+    public void queryDogInfo(int petID,Consumer<RspDogDetailInfo> onNext,
+                             Consumer<Throwable> onError){
+        RxHttp.postForm(IService.QUERY_DOG_LIST)
+            .add("apiKey",IService.API_KEY)
+            .add("petID",petID)
+            .asObject(RspDogDetailInfo.class)
+            .as(RxLife.asOnMain(mLifecycleOwner))
+            .subscribe(onNext,onError);
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package com.homework.lovedog;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
@@ -9,11 +10,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.homework.lovedog.base.IBaseView;
+import com.homework.lovedog.bean.DogList;
 import com.homework.lovedog.presenter.MainPresenter;
+import com.homework.lovedog.view.IMainView;
 import com.leaf.library.StatusBarUtil;
 
-public class MainActivity extends AppCompatActivity implements IBaseView {
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements IMainView {
 
     private MainPresenter mMainPresenter;
 
@@ -25,6 +29,12 @@ public class MainActivity extends AppCompatActivity implements IBaseView {
             ResourcesCompat.getColor(getResources(),R.color.white,null));
         StatusBarUtil.setDarkMode(this);
         mMainPresenter = new MainPresenter(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mMainPresenter.queryDogList(true);
     }
 
     @Nullable
@@ -48,5 +58,10 @@ public class MainActivity extends AppCompatActivity implements IBaseView {
     @Override
     public Context getContext() {
         return null;
+    }
+
+    @Override
+    public void showDogList(@NonNull List<DogList> dogList) {
+
     }
 }
