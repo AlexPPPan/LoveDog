@@ -34,7 +34,9 @@ public class MainActivity extends AppCompatActivity implements IMainView {
     @Override
     protected void onResume() {
         super.onResume();
-        mMainPresenter.queryDogList(true);
+        if(mMainPresenter!=null) {
+            mMainPresenter.queryDogList(true);
+        }
     }
 
     @Nullable
@@ -51,13 +53,13 @@ public class MainActivity extends AppCompatActivity implements IMainView {
     @Nullable
     @Override
     public LifecycleOwner getViewLifecycleOwner() {
-        return null;
+        return this;
     }
 
     @Nullable
     @Override
     public Context getContext() {
-        return null;
+        return this;
     }
 
     @Override

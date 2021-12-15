@@ -10,5 +10,5 @@ import rxhttp.wrapper.annotation.Domain;
 public class BaseUrl {
 
     @DefaultDomain
-    public static String PLATFORM_URL = Config.PLATFORM_URL;
+    public static String PLATFORM_URL = "https://api.apishop.net/common/dogFamily";
 }
