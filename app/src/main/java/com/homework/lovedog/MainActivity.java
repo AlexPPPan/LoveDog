@@ -11,6 +11,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.homework.lovedog.bean.DogList;
+import com.homework.lovedog.databinding.ActivityMainBinding;
 import com.homework.lovedog.presenter.MainPresenter;
 import com.homework.lovedog.view.IMainView;
 import com.leaf.library.StatusBarUtil;
@@ -20,15 +21,19 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements IMainView {
 
     private MainPresenter mMainPresenter;
+    private ActivityMainBinding mViewBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        mViewBinding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(mViewBinding.getRoot());
         StatusBarUtil.setColor(this,
             ResourcesCompat.getColor(getResources(),R.color.white,null));
         StatusBarUtil.setDarkMode(this);
         mMainPresenter = new MainPresenter(this);
+
+
     }
 
     @Override

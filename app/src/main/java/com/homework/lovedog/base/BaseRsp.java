@@ -8,21 +8,21 @@ import com.homework.lovedog.service.ResultCode;
 
 
 public class BaseRsp implements Parcelable{
-    public String result;
-    public String message;
+    public String statusCode;
+    public String desc;
 
     public BaseRsp() {
     }
 
     protected BaseRsp(Parcel in) {
-        result = in.readString();
-        message = in.readString();
+        statusCode = in.readString();
+        desc = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(result);
-        dest.writeString(message);
+        dest.writeString(statusCode);
+        dest.writeString(desc);
     }
 
     @Override
@@ -42,37 +42,37 @@ public class BaseRsp implements Parcelable{
         }
     };
 
-    public String getResult() {
-        return result;
+    public String getStatusCode() {
+        return statusCode;
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
     }
 
-    public String getMessage() {
-        return message;
+    public String getDesc() {
+        return desc;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
     public boolean isSuccess(){
-         ResultCode resultCode=ResultCode.parse(result);
+         ResultCode resultCode=ResultCode.parse(statusCode);
          return  resultCode==ResultCode.SUCCESS;
     }
 
     public String getResultCodeMessage(){
-        ResultCode resultCode=ResultCode.parse(result);
+        ResultCode resultCode=ResultCode.parse(statusCode);
         return resultCode!=null?resultCode.getMessage():"";
     }
 
     @Override
     public String toString() {
         return "BaseRsp{" +
-            "result='" + result + '\'' +
-            ", message='" + message + '\'' +
+            "result='" + statusCode + '\'' +
+            ", message='" + desc + '\'' +
             '}';
     }
 }

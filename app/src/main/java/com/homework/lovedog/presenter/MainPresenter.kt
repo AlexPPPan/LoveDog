@@ -1,5 +1,6 @@
 package com.homework.lovedog.presenter
 
+import android.util.Log
 import com.homework.lovedog.base.BasePresenter
 import com.homework.lovedog.base.IBaseView
 import com.homework.lovedog.bean.RspDogList
@@ -17,7 +18,7 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
 
         },{
 
-
+            Log.e("TAG",it.message+"")
         })
 
     }

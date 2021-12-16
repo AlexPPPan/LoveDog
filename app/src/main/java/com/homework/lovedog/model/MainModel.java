@@ -41,7 +41,7 @@ public class MainModel  extends BaseModel {
 
     public void queryDogInfo(int petID,Consumer<RspDogDetailInfo> onNext,
                              Consumer<Throwable> onError){
-        RxHttp.postForm(IService.QUERY_DOG_LIST)
+        RxHttp.postForm(IService.QUERY_DOG_INFO)
             .add("apiKey",IService.API_KEY)
             .add("petID",petID)
             .asObject(RspDogDetailInfo.class)

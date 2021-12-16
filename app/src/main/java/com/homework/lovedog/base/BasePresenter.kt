@@ -7,7 +7,7 @@ abstract class BasePresenter {
     protected fun callbackRspFailure(rsp: BaseRsp?, view: IBaseView?) {
         if (view != null) {
            if (rsp != null) {
-                view.serverErr(String.format("%s(%s)", rsp.message, rsp.result))
+                view.serverErr(String.format("%s(%s)", rsp.desc, rsp.statusCode))
             } else {
                 view.serverErr("null data")
             }
