@@ -69,5 +69,7 @@ dependencies {
     implementation 'com.github.Ye-Miao:StatusBarUtil:1.7.5'
     implementation('com.squareup.picasso:picasso:2.5.2')
     implementation 'com.guolindev.permissionx:permissionx:1.6.1'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-14'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-14'
 }
 

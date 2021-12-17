@@ -47,6 +47,12 @@ class MainActivity : AppCompatActivity(), IMainView {
         } else {
             mMainPresenter
         }
+        mViewBinding.refreshLayout.setOnLoadMoreListener {
+            mMainPresenter.queryDogList(false)
+        }
+        mViewBinding.refreshLayout.setOnRefreshListener{
+            mMainPresenter.queryDogList(true)
+        }
         PermissionX.init(this).permissions(Manifest
                 .permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .onExplainRequestReason { scope, deniedList ->
@@ -59,6 +65,7 @@ class MainActivity : AppCompatActivity(), IMainView {
                     if (allGranted) {
                         val file = File("${Environment.getExternalStorageDirectory()}/test/glide/")
                         file.mkdir()
+                        adapter.clearData()
                         mMainPresenter.queryDogList(true)
                     } else {
                         Toast.makeText(this, "These permissions are denied: $deniedList", Toast.LENGTH_LONG).show()
@@ -81,7 +88,9 @@ class MainActivity : AppCompatActivity(), IMainView {
     }
 
     override fun showDogList(dogList: MutableList<DogList>?) {
-        adapter.addData(dogList)
+        mViewBinding.refreshLayout.finishLoadMore()
+        mViewBinding.refreshLayout.finishRefresh()
+        adapter.loadMoreData(dogList)
     }
 
 

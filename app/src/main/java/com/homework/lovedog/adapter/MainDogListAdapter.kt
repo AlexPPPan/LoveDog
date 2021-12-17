@@ -27,18 +27,10 @@ class MainDogListAdapter(context: Context?, datas: MutableList<DogList>?) :
 
         viewBinding.apply {
             t?.apply {
-
-
-
-//                val path = GlideUrl(coverURL, LazyHeaders.Builder()
-//                        .addHeader("device-type", "android")
-//                        .addHeader("Cookie","12325457687vvbdfags")
-//                        .build())
-//                Glide.with(mContext).load(path).into(dogImageIv)
-                Picasso.with(mContext).load(coverURL).error(R.drawable.dog_icon)
-                        .placeholder(R.drawable.dog_icon).into(dogImageIv)
+                Glide.with(mContext).load(coverURL).placeholder(R.drawable.dog_icon)
+                        .error(R.drawable.dog_icon).into(dogImageIv)
                 dogNameTv.text = StringFormatUtils.defaultValueFormat(engName,"Dog")
-                dogPriceTv.text = "Price:${StringFormatUtils.defaultValueFormat(price,"")}YUAN"
+                dogPriceTv.text = "Price:￥${StringFormatUtils.defaultValueFormat(price,"")}"
             }
 
         }

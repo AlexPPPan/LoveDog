@@ -14,8 +14,12 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
 
 
     override fun queryDogList(allFresh: Boolean) {
+        if (allFresh){
+            page = 1
+        }
         model.queryDogList(page,pageSize,{rsp:RspDogList?->
             if (rsp!=null&&rsp.isSuccess){
+                page++
                 view.showDogList(rsp.result?.petFamilyList)
             }else{
                 callbackRspFailure(rsp, view)
