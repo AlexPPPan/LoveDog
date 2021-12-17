@@ -10,6 +10,7 @@ import com.homework.lovedog.R
 import android.app.Activity
 import android.content.Context
 import android.os.Environment
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,24 +47,23 @@ class MainActivity : AppCompatActivity(), IMainView {
         } else {
             mMainPresenter
         }
-        PermissionX.init(this).permissions( Manifest
+        PermissionX.init(this).permissions(Manifest
                 .permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .request { allGranted, _, _ ->
+                .onExplainRequestReason { scope, deniedList ->
+                    scope.showRequestReasonDialog(deniedList, "Core fundamental are based on these permissions", "OK", "Cancel")
+                }
+                .onForwardToSettings { scope, deniedList ->
+                    scope.showForwardToSettingsDialog(deniedList, "You need to allow necessary permissions in Settings manually", "OK", "Cancel")
+                }
+                .request { allGranted, _, deniedList ->
                     if (allGranted) {
                         val file = File("${Environment.getExternalStorageDirectory()}/test/glide/")
                         file.mkdir()
                         mMainPresenter.queryDogList(true)
                     } else {
-                        exitProcess(0)
+                        Toast.makeText(this, "These permissions are denied: $deniedList", Toast.LENGTH_LONG).show()
                     }
                 }
-
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-
     }
 
 
