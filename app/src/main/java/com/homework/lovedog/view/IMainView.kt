@@ -5,5 +5,5 @@ import com.homework.lovedog.bean.DogList
 
 
 interface IMainView :IBaseView{
-    fun showDogList(dogList: MutableList<DogList>)
+    fun showDogList(dogList: MutableList<DogList>?)
 }
