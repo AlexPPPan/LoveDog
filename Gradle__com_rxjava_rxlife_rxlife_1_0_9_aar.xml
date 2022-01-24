@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.rxjava.rxlife:rxlife:1.0.9@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/bea577a009145b1c2db8b53fcaf64b7e/transformed/jetified-rxlife-1.0.9/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/bea577a009145b1c2db8b53fcaf64b7e/transformed/jetified-rxlife-1.0.9/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/bea577a009145b1c2db8b53fcaf64b7e/transformed/jetified-rxlife-1.0.9/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.rxjava.rxlife/rxlife/1.0.9/fcef36b6ea5b48f78590fc52bdea77cecfb6ee6f/rxlife-1.0.9-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.rxjava.rxlife/rxlife/1.0.9/5b977f4e85e8ba42c7e0d762a85228f50e8bcfaa/rxlife-1.0.9-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

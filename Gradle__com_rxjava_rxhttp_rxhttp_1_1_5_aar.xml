@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.rxjava.rxhttp:rxhttp:1.1.5@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/7d2f5e9e0316c0c45d191c4e002d46c6/transformed/jetified-rxhttp-1.1.5/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/7d2f5e9e0316c0c45d191c4e002d46c6/transformed/jetified-rxhttp-1.1.5/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/7d2f5e9e0316c0c45d191c4e002d46c6/transformed/jetified-rxhttp-1.1.5/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.rxjava.rxhttp/rxhttp/1.1.5/7a7ef8e87b9ebf9969b1ad9c1ddccb2270e1725f/rxhttp-1.1.5-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.rxjava.rxhttp/rxhttp/1.1.5/152e7e89ba62a53304e319f338027957817a483a/rxhttp-1.1.5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
