@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="18dp">
+
+    <EditText
+        android:id="@+id/input_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:background="@null"
+        android:hint="please enter account"
+        android:textSize="22sp" />
+
+    <EditText
+        android:id="@+id/input_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:background="@null"
+        android:hint="please enter password"
+        android:inputType="textPassword"
+        android:textSize="22sp" />
+
+    <EditText
+        android:id="@+id/input_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:background="@null"
+        android:hint="please enter the password again"
+        android:inputType="textPassword"
+        android:textSize="22sp" />
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:onClick="regClick"
+        android:text="registered"
+        android:textSize="22sp" />
+
+
+
+</LinearLayout>
