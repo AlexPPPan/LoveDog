@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.homework.lovedog.MainActivity;
 import com.homework.lovedog.R;
+import com.homework.lovedog.activity.ui.login.LoginActivity;
 import com.homework.lovedog.base.BaseActivity;
 import com.homework.lovedog.databinding.ActivitySplashLayoutBinding;
 import com.leaf.library.StatusBarUtil;
@@ -23,7 +24,7 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     public void onClick(View view) {
-
+//
     }
 
     @Override
@@ -33,8 +34,9 @@ public class SplashActivity extends BaseActivity {
             ActivitySplashLayoutBinding.inflate(getLayoutInflater());
         setContentView(inflate.getRoot());
         new Handler().postDelayed(() -> runOnUiThread(() -> {
-            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
             startActivity(intent);
+            finish();
         }),1000);
 
     }

@@ -3,6 +3,7 @@ package com.homework.lovedog.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -21,9 +22,12 @@ import com.squareup.picasso.Picasso
 
 class MainDogListAdapter(context: Context?, datas: MutableList<DogList>?) :
         SimpleRecyclerViewAdapter<DogList>(context, datas, R.layout.item_main_dog_list_layout) {
+
+
     @SuppressLint("SetTextI18n")
     override fun bindViewHolder(holder: BaseViewHolder, t: DogList?, position: Int) {
        val viewBinding = ItemMainDogListLayoutBinding.bind(holder.itemView)
+
 
         viewBinding.apply {
             t?.apply {
@@ -34,5 +38,18 @@ class MainDogListAdapter(context: Context?, datas: MutableList<DogList>?) :
             }
 
         }
+    }
+
+    private lateinit var onItemClickListener: OnItemClickListener
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.onItemClickListener = listener
+    }
+    interface OnItemClickListener{
+        fun onItemClick(view: View, position: Int)
+        fun onItemLongClick(view: View, position: Int)
+    }
+
+    public override fun getDatas(): MutableList<DogList>{
+        return datas
     }
 }

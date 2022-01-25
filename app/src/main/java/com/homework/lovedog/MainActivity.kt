@@ -10,6 +10,7 @@ import com.homework.lovedog.R
 import android.app.Activity
 import android.content.Context
 import android.os.Environment
+import android.view.View
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LifecycleOwner
@@ -41,6 +42,16 @@ class MainActivity : AppCompatActivity(), IMainView {
         } else {
             adapter
         }
+
+        adapter?.setOnItemClickListener(object: MainDogListAdapter.OnItemClickListener {
+            override fun onItemClick(view: View, position: Int) {
+
+            }
+
+            override fun onItemLongClick(view: View, position: Int) {
+
+            }
+        })
         mViewBinding.dogMainList.adapter = adapter
         mMainPresenter = if (!::mMainPresenter.isInitialized) {
             MainPresenter(this)
