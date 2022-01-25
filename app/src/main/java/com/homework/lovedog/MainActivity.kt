@@ -9,12 +9,14 @@ import com.leaf.library.StatusBarUtil
 import com.homework.lovedog.R
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Environment
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.homework.lovedog.activity.ui.PhotoActivity
 import com.homework.lovedog.adapter.MainDogListAdapter
 import com.homework.lovedog.bean.DogList
 import com.homework.lovedog.databinding.ActivityMainBinding
@@ -39,16 +41,20 @@ class MainActivity : AppCompatActivity(), IMainView {
         StatusBarUtil.setDarkMode(this)
         adapter = if (!::adapter.isInitialized) {
             MainDogListAdapter(this, dogList)
+
         } else {
             adapter
         }
 
         adapter?.setOnItemClickListener(object: MainDogListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-
+                var intent: Intent = Intent(this@MainActivity, PhotoActivity::class.java)
+                intent.putExtra("url", adapter.getDatas().get(position).coverURL)
+                startActivity(intent)
             }
 
             override fun onItemLongClick(view: View, position: Int) {
+
 
             }
         })

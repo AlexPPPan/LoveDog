@@ -27,8 +27,9 @@ class MainDogListAdapter(context: Context?, datas: MutableList<DogList>?) :
     @SuppressLint("SetTextI18n")
     override fun bindViewHolder(holder: BaseViewHolder, t: DogList?, position: Int) {
        val viewBinding = ItemMainDogListLayoutBinding.bind(holder.itemView)
-
-
+        holder.itemView.setOnClickListener {
+            onItemClickListener.onItemClick(holder.itemView,position)
+        }
         viewBinding.apply {
             t?.apply {
                 Glide.with(mContext).load(coverURL).placeholder(R.drawable.dog_icon)
@@ -49,7 +50,5 @@ class MainDogListAdapter(context: Context?, datas: MutableList<DogList>?) :
         fun onItemLongClick(view: View, position: Int)
     }
 
-    public override fun getDatas(): MutableList<DogList>{
-        return datas
-    }
+
 }
