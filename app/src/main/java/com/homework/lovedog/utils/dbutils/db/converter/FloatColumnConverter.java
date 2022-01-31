@@ -1,8 +1,9 @@
 package com.homework.lovedog.utils.dbutils.db.converter;
 
-import android.database.Cursor;
 
 import com.homework.lovedog.utils.dbutils.db.sqlite.ColumnDbType;
+
+import net.sqlcipher.Cursor;
 
 
 public class FloatColumnConverter implements ColumnConverter<Float> {
