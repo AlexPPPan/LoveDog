@@ -47,10 +47,10 @@ class MainActivity : AppCompatActivity(), IMainView {
             adapter
         }
 
-        adapter?.setOnItemClickListener(object : MainDogListAdapter.OnItemClickListener {
+        adapter.setOnItemClickListener(object : MainDogListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-                var intent: Intent = Intent(this@MainActivity, PhotoActivity::class.java)
-                intent.putExtra("url", adapter.getDatas().get(position).coverURL)
+                val intent = Intent(this@MainActivity, PhotoActivity::class.java)
+                intent.putExtra("url", adapter.datas[position].coverURL)
                 startActivity(intent)
             }
 

@@ -44,7 +44,7 @@ public class DogInfoDbManager {
       }
    }
 
-   public static DogInfo searchDogInfo(int pitId){
+   public static DogInfo queryDogInfo(int pitId){
       DbManager dogInfoDb = getDogInfoDb();
       if(dogInfoDb!=null) {
          try {

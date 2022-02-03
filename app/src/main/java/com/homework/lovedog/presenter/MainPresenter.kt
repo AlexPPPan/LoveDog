@@ -1,35 +1,101 @@
 package com.homework.lovedog.presenter
 
+import android.annotation.SuppressLint
 import android.util.Log
 import com.homework.lovedog.base.BasePresenter
-import com.homework.lovedog.base.IBaseView
+import com.homework.lovedog.bean.DogInfo
 import com.homework.lovedog.bean.RspDogList
+import com.homework.lovedog.dbmanager.DogInfoDbManager
 import com.homework.lovedog.model.MainModel
+import com.homework.lovedog.utils.GoogleTranslateUtil
 import com.homework.lovedog.view.IMainView
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
-    val model: MainModel = MainModel(view.getViewLifecycleOwner())
-    var page = 1
-    var pageSize = 30;
+   private val model: MainModel = MainModel(view.getViewLifecycleOwner())
+   private var page = 1
+   private var pageSize = 30;
 
 
     override fun queryDogList(allFresh: Boolean) {
-        if (allFresh){
+        if (allFresh) {
             page = 1
         }
-        model.queryDogList(page,pageSize,{rsp:RspDogList?->
-            if (rsp!=null&&rsp.isSuccess){
+        model.queryDogList(page, pageSize, { rsp: RspDogList? ->
+            if (rsp != null && rsp.isSuccess) {
                 page++
                 view.showDogList(rsp.result?.petFamilyList)
-            }else{
+            } else {
                 callbackRspFailure(rsp, view)
             }
-        },{
-            requestError(it,view)
-            Log.e("TAG",it.message+"")
+        }, {
+            requestError(it, view)
+            Log.e("TAG", it.message + "")
         })
 
     }
 
+    @SuppressLint("CheckResult")
+    override fun getDogDetail(petId: Int) {
+        Observable.create<DogInfo> {
+            if (!it.isDisposed) {
+                val dogInfoQuery = DogInfoDbManager.queryDogInfo(petId)
+                if (dogInfoQuery != null) {
+                    val dogInfo = dogInfoTranslate(dogInfoQuery)
+                    DogInfoDbManager.saveOrUpdateDogInfo(dogInfo)
+                    it.onNext(dogInfo)
+                } else {
+                    it.onError(Throwable("get info on net"))
+                }
+            }
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ dogInfo ->
+                view.showDogInfo(dogInfo)
+            }, {
+                getDogDetailOnNet(petId)
+            })
+    }
+
+    private fun getDogDetailOnNet(petId: Int) {
+        model.queryDogInfo(petId, { rsp ->
+            if (rsp != null && rsp.isSuccess && rsp.result != null) {
+                val dogInfo = dogInfoTranslate(rsp.result)
+                DogInfoDbManager.saveOrUpdateDogInfo(dogInfo)
+                view.showDogInfo(dogInfo)
+            } else {
+                callbackRspFailure(rsp, view)
+            }
+
+        }, {
+            requestError(it, view)
+            Log.e("TAG", it.message + "")
+        })
+    }
+
+
+    private fun dogInfoTranslate(dogInfo: DogInfo): DogInfo {
+        return dogInfo.apply {
+            enCharacter = translate(enCharacter, character)
+            enNation = translate(enNation, nation)
+            enEasyOfDisease = translate(enEasyOfDisease, easyOfDisease)
+            enLife = translate(enLife, life)
+            enLife = translate(enLife, life)
+            enPrice = translate(enPrice, price)
+            enDes = translate(enDes, des)
+            enFeature = translate(enFeature, feature)
+            enCharacterFeature = translate(enCharacterFeature, characterFeature)
+            enCareKnowledge = translate(enCareKnowledge, careKnowledge)
+            enFeedPoints = translate(enFeedPoints, feedPoints)
+        }
+    }
+
+    private fun translate(en: String?, cn: String?): String? {
+        return if (en.isNullOrEmpty())
+            GoogleTranslateUtil.getInstance().query(cn)
+        else en
+    }
 
 }
