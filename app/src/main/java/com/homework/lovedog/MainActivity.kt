@@ -3,7 +3,6 @@ package com.homework.lovedog
 import android.Manifest
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -11,29 +10,28 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.homework.lovedog.activity.ui.PhotoActivity
 import com.homework.lovedog.adapter.MainDogListAdapter
+import com.homework.lovedog.bean.DogInfo
 import com.homework.lovedog.bean.DogList
 import com.homework.lovedog.databinding.ActivityMainBinding
-import com.homework.lovedog.dbmanager.DogInfoDbManager
 import com.homework.lovedog.presenter.MainPresenter
+import com.homework.lovedog.utils.GoogleTranslateUtil
 import com.homework.lovedog.utils.MMKVUtils
 import com.homework.lovedog.utils.NewFileUtils
 import com.homework.lovedog.view.IMainView
 import com.leaf.library.StatusBarUtil
 import com.permissionx.guolindev.PermissionX
-import java.io.File
 
 class MainActivity : AppCompatActivity(), IMainView {
     private lateinit var mViewBinding: ActivityMainBinding
-    private lateinit var mMainPresenter: MainPresenter
+    private lateinit var presenter: MainPresenter
     private lateinit var adapter: MainDogListAdapter
     private val dogList = mutableListOf<DogList>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mViewBinding = ActivityMainBinding.inflate(layoutInflater)
         mViewBinding.dogMainList.layoutManager = LinearLayoutManager(this)
-
+        GoogleTranslateUtil.getInstance().update_TKK()
         setContentView(mViewBinding.root)
         StatusBarUtil.setColor(
             this,
@@ -49,9 +47,10 @@ class MainActivity : AppCompatActivity(), IMainView {
 
         adapter.setOnItemClickListener(object : MainDogListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-                val intent = Intent(this@MainActivity, PhotoActivity::class.java)
-                intent.putExtra("url", adapter.datas[position].coverURL)
-                startActivity(intent)
+//                val intent = Intent(this@MainActivity, PhotoActivity::class.java)
+//                intent.putExtra("url", adapter.datas[position].coverURL)
+//                startActivity(intent)
+                presenter.getDogDetail(adapter.getItem(position).petID)
             }
 
             override fun onItemLongClick(view: View, position: Int) {
@@ -60,16 +59,16 @@ class MainActivity : AppCompatActivity(), IMainView {
             }
         })
         mViewBinding.dogMainList.adapter = adapter
-        mMainPresenter = if (!::mMainPresenter.isInitialized) {
+        presenter = if (!::presenter.isInitialized) {
             MainPresenter(this)
         } else {
-            mMainPresenter
+            presenter
         }
         mViewBinding.refreshLayout.setOnLoadMoreListener {
-            mMainPresenter.queryDogList(false)
+            presenter.queryDogList(false)
         }
         mViewBinding.refreshLayout.setOnRefreshListener {
-            mMainPresenter.queryDogList(true)
+            presenter.queryDogList(true)
         }
         PermissionX.init(this).permissions(
             Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -105,7 +104,7 @@ class MainActivity : AppCompatActivity(), IMainView {
                         dbFile.mkdir()
                     MMKVUtils.saveDbPath(dbFile.path)
                     adapter.clearData()
-                    mMainPresenter.queryDogList(true)
+                    presenter.queryDogList(true)
                 } else {
                     Toast.makeText(
                         this,
@@ -134,6 +133,11 @@ class MainActivity : AppCompatActivity(), IMainView {
         mViewBinding.refreshLayout.finishLoadMore()
         mViewBinding.refreshLayout.finishRefresh()
         adapter.loadMoreData(dogList)
+    }
+
+    override fun showDogInfo(dogInfo: DogInfo?) {
+
+
     }
 
 

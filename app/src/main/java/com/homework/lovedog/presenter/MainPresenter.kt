@@ -8,10 +8,12 @@ import com.homework.lovedog.bean.RspDogList
 import com.homework.lovedog.dbmanager.DogInfoDbManager
 import com.homework.lovedog.model.MainModel
 import com.homework.lovedog.utils.GoogleTranslateUtil
+import com.homework.lovedog.utils.GsonUtils
 import com.homework.lovedog.view.IMainView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import rxhttp.wrapper.utils.GsonUtil
 
 class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
    private val model: MainModel = MainModel(view.getViewLifecycleOwner())
@@ -45,6 +47,7 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
                 if (dogInfoQuery != null) {
                     val dogInfo = dogInfoTranslate(dogInfoQuery)
                     DogInfoDbManager.saveOrUpdateDogInfo(dogInfo)
+                    dogInfo.imageURL = GsonUtils.jsonToArrayList(dogInfo.imageURLJson,String::class.java)
                     it.onNext(dogInfo)
                 } else {
                     it.onError(Throwable("get info on net"))
@@ -62,19 +65,31 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
     private fun getDogDetailOnNet(petId: Int) {
         model.queryDogInfo(petId, { rsp ->
             if (rsp != null && rsp.isSuccess && rsp.result != null) {
-                val dogInfo = dogInfoTranslate(rsp.result)
-                DogInfoDbManager.saveOrUpdateDogInfo(dogInfo)
-                view.showDogInfo(dogInfo)
+              formatDogInfo(rsp.result)
             } else {
                 callbackRspFailure(rsp, view)
             }
-
         }, {
             requestError(it, view)
             Log.e("TAG", it.message + "")
         })
     }
 
+    @SuppressLint("CheckResult")
+    private fun formatDogInfo(dogInfo: DogInfo){
+        Observable.create<DogInfo> {
+            if (!it.isDisposed){
+                val dogInfoTr = dogInfoTranslate(dogInfo)
+                dogInfoTr.imageURLJson = GsonUtils.toJsonStr(dogInfoTr.imageURL)
+                DogInfoDbManager.saveOrUpdateDogInfo(dogInfoTr)
+                it.onNext(dogInfoTr)
+            }
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe{
+                view.showDogInfo(it)
+            }
+    }
 
     private fun dogInfoTranslate(dogInfo: DogInfo): DogInfo {
         return dogInfo.apply {
