@@ -9,6 +9,7 @@ import com.homework.lovedog.dbmanager.DogInfoDbManager
 import com.homework.lovedog.model.MainModel
 import com.homework.lovedog.utils.GoogleTranslateUtil
 import com.homework.lovedog.utils.GsonUtils
+import com.homework.lovedog.utils.translate.TransApi
 import com.homework.lovedog.view.IMainView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -19,6 +20,8 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
    private val model: MainModel = MainModel(view.getViewLifecycleOwner())
    private var page = 1
    private var pageSize = 30;
+   private val transApi:TransApi = TransApi("20220209001077870","lamns9ir2ZaDApJU4gdp")
+
 
 
     override fun queryDogList(allFresh: Boolean) {
@@ -109,7 +112,7 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
 
     private fun translate(en: String?, cn: String?): String? {
         return if (en.isNullOrEmpty())
-            GoogleTranslateUtil.getInstance().query(cn)
+            transApi.getTransResult(cn,"zh","en")
         else en
     }
 

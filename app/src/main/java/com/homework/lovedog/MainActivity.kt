@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity(), IMainView {
         super.onCreate(savedInstanceState)
         mViewBinding = ActivityMainBinding.inflate(layoutInflater)
         mViewBinding.dogMainList.layoutManager = LinearLayoutManager(this)
-        GoogleTranslateUtil.getInstance().update_TKK()
         setContentView(mViewBinding.root)
         StatusBarUtil.setColor(
             this,
