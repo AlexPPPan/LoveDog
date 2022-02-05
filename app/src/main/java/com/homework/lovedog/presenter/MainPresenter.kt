@@ -5,6 +5,7 @@ import android.util.Log
 import com.homework.lovedog.base.BasePresenter
 import com.homework.lovedog.bean.DogInfo
 import com.homework.lovedog.bean.RspDogList
+import com.homework.lovedog.bean.TranslateResult
 import com.homework.lovedog.dbmanager.DogInfoDbManager
 import com.homework.lovedog.model.MainModel
 import com.homework.lovedog.utils.GoogleTranslateUtil
@@ -100,7 +101,6 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
             enNation = translate(enNation, nation)
             enEasyOfDisease = translate(enEasyOfDisease, easyOfDisease)
             enLife = translate(enLife, life)
-            enLife = translate(enLife, life)
             enPrice = translate(enPrice, price)
             enDes = translate(enDes, des)
             enFeature = translate(enFeature, feature)
@@ -111,8 +111,20 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
     }
 
     private fun translate(en: String?, cn: String?): String? {
-        return if (en.isNullOrEmpty())
-            transApi.getTransResult(cn,"zh","en")
+        return if (en.isNullOrEmpty()) {
+            val transResultJson = transApi.getTransResult(cn, "zh", "en")
+            val transResult = GsonUtils.fromJson(transResultJson, TranslateResult::class.java)
+            val transResultList= transResult?.trans_result
+            if (transResultList!=null&&transResultList.size>0){
+                val stringBuilder = StringBuffer()
+                transResultList.forEach {
+                    stringBuilder.append(it.dst)
+                }
+                stringBuilder.toString()
+            }else{
+                en
+            }
+        }
         else en
     }
 

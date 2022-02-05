@@ -6,6 +6,7 @@ import com.homework.lovedog.utils.MMKVUtils;
 import com.homework.lovedog.utils.dbutils.DBUtils;
 import com.homework.lovedog.utils.dbutils.DbManager;
 
+import java.io.File;
 import java.io.IOException;
 
 public class DogInfoDbManager {
@@ -13,7 +14,7 @@ public class DogInfoDbManager {
    public static final String DOG_INFO_TABLE ="dog_info";
 
    public static String getResourceDbPath() {
-      return MMKVUtils.INSTANCE.getDbPath() + DOG_INFO_DB;
+      return MMKVUtils.INSTANCE.getDbPath()+ File.separator  + DOG_INFO_DB;
    }
 
    public static String getPwd() {
