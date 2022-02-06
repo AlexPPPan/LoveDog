@@ -3,6 +3,7 @@ package com.homework.lovedog
 import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -10,15 +11,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.homework.lovedog.activity.DogInfoActivity
 import com.homework.lovedog.adapter.MainDogListAdapter
 import com.homework.lovedog.bean.DogInfo
 import com.homework.lovedog.bean.DogList
 import com.homework.lovedog.databinding.ActivityMainBinding
 import com.homework.lovedog.presenter.MainPresenter
-import com.homework.lovedog.utils.GoogleTranslateUtil
 import com.homework.lovedog.utils.MMKVUtils
 import com.homework.lovedog.utils.NewFileUtils
 import com.homework.lovedog.view.IMainView
+import com.homework.lovedog.widget.CustomProgress
 import com.leaf.library.StatusBarUtil
 import com.permissionx.guolindev.PermissionX
 
@@ -49,6 +51,7 @@ class MainActivity : AppCompatActivity(), IMainView {
 //                val intent = Intent(this@MainActivity, PhotoActivity::class.java)
 //                intent.putExtra("url", adapter.datas[position].coverURL)
 //                startActivity(intent)
+                CustomProgress.show(getActivity(), "Loading...", false, false, null)
                 presenter.getDogDetail(adapter.getItem(position).petID)
             }
 
@@ -119,7 +122,9 @@ class MainActivity : AppCompatActivity(), IMainView {
         return this
     }
 
-    override fun serverErr(message: String?) {}
+    override fun serverErr(message: String?) {
+        CustomProgress.dismissDialog()
+    }
     override fun getViewLifecycleOwner(): LifecycleOwner {
         return this
     }
@@ -135,8 +140,11 @@ class MainActivity : AppCompatActivity(), IMainView {
     }
 
     override fun showDogInfo(dogInfo: DogInfo?) {
-
-
+        CustomProgress.dismissDialog()
+        val intent = Intent(this@MainActivity, DogInfoActivity::class.java)
+        val bundle = Bundle()
+        bundle.putParcelable("dog_info",dogInfo)
+        startActivity(intent,bundle)
     }
 
 

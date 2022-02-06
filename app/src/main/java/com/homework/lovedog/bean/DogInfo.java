@@ -1,13 +1,16 @@
 package com.homework.lovedog.bean;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.homework.lovedog.dbmanager.DogInfoDbManager;
 import com.homework.lovedog.utils.dbutils.db.annotation.Column;
 import com.homework.lovedog.utils.dbutils.db.annotation.Table;
 
 import java.util.List;
 @Table(name = DogInfoDbManager.DOG_INFO_TABLE)
-public class DogInfo {
+public class DogInfo implements Parcelable {
    public static final String COLUMN_PET_ID="petID";
    public static final String COLUMN_NAME="name";
    public static final String COLUMN_ENG_NAME="engName";
@@ -32,6 +35,9 @@ public class DogInfo {
    public static final String COLUMN_FEED_POINTS="feedPoints";
    public static final String COLUMN_EN_FEED_POINTS="enFeedPoints";
    public static final String COLUMN_IMAGE_URL_JSON="imageURLJson";
+
+   public DogInfo() {
+   }
 
    @Column(name = COLUMN_PET_ID,autoGen = false,isId = true)
    private int petID;
@@ -82,6 +88,80 @@ public class DogInfo {
    private List<String> imageURL;
    @Column(name = COLUMN_IMAGE_URL_JSON)
    private String imageURLJson;
+
+   protected DogInfo(Parcel in) {
+      petID = in.readInt();
+      name = in.readString();
+      engName = in.readString();
+      character = in.readString();
+      enCharacter = in.readString();
+      nation = in.readString();
+      enNation = in.readString();
+      easyOfDisease = in.readString();
+      enEasyOfDisease = in.readString();
+      life = in.readString();
+      enLife = in.readString();
+      price = in.readString();
+      enPrice = in.readString();
+      des = in.readString();
+      enDes = in.readString();
+      feature = in.readString();
+      enFeature = in.readString();
+      characterFeature = in.readString();
+      enCharacterFeature = in.readString();
+      careKnowledge = in.readString();
+      enCareKnowledge = in.readString();
+      feedPoints = in.readString();
+      enFeedPoints = in.readString();
+      imageURL = in.createStringArrayList();
+      imageURLJson = in.readString();
+   }
+
+   @Override
+   public void writeToParcel(Parcel dest, int flags) {
+      dest.writeInt(petID);
+      dest.writeString(name);
+      dest.writeString(engName);
+      dest.writeString(character);
+      dest.writeString(enCharacter);
+      dest.writeString(nation);
+      dest.writeString(enNation);
+      dest.writeString(easyOfDisease);
+      dest.writeString(enEasyOfDisease);
+      dest.writeString(life);
+      dest.writeString(enLife);
+      dest.writeString(price);
+      dest.writeString(enPrice);
+      dest.writeString(des);
+      dest.writeString(enDes);
+      dest.writeString(feature);
+      dest.writeString(enFeature);
+      dest.writeString(characterFeature);
+      dest.writeString(enCharacterFeature);
+      dest.writeString(careKnowledge);
+      dest.writeString(enCareKnowledge);
+      dest.writeString(feedPoints);
+      dest.writeString(enFeedPoints);
+      dest.writeStringList(imageURL);
+      dest.writeString(imageURLJson);
+   }
+
+   @Override
+   public int describeContents() {
+      return 0;
+   }
+
+   public static final Creator<DogInfo> CREATOR = new Creator<DogInfo>() {
+      @Override
+      public DogInfo createFromParcel(Parcel in) {
+         return new DogInfo(in);
+      }
+
+      @Override
+      public DogInfo[] newArray(int size) {
+         return new DogInfo[size];
+      }
+   };
 
    public int getPetID() {
       return petID;
