@@ -48,9 +48,7 @@ class MainActivity : AppCompatActivity(), IMainView {
 
         adapter.setOnItemClickListener(object : MainDogListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-//                val intent = Intent(this@MainActivity, PhotoActivity::class.java)
-//                intent.putExtra("url", adapter.datas[position].coverURL)
-//                startActivity(intent)
+
                 CustomProgress.show(getActivity(), "Loading...", false, false, null)
                 presenter.getDogDetail(adapter.getItem(position))
             }
