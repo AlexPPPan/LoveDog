@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), IMainView {
 //                intent.putExtra("url", adapter.datas[position].coverURL)
 //                startActivity(intent)
                 CustomProgress.show(getActivity(), "Loading...", false, false, null)
-                presenter.getDogDetail(adapter.getItem(position).petID)
+                presenter.getDogDetail(adapter.getItem(position))
             }
 
             override fun onItemLongClick(view: View, position: Int) {

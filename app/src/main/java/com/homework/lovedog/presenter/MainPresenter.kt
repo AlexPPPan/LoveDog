@@ -5,6 +5,7 @@ import android.os.SystemClock
 import android.util.Log
 import com.homework.lovedog.base.BasePresenter
 import com.homework.lovedog.bean.DogInfo
+import com.homework.lovedog.bean.DogItem
 import com.homework.lovedog.bean.RspDogList
 import com.homework.lovedog.bean.TranslateResult
 import com.homework.lovedog.dbmanager.DogInfoDbManager
@@ -46,13 +47,14 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
     }
 
     @SuppressLint("CheckResult")
-    override fun getDogDetail(petId: Int) {
+    override fun getDogDetail(dogItem: DogItem) {
         Observable.create<DogInfo> {
             if (!it.isDisposed) {
-                val dogInfoQuery = DogInfoDbManager.queryDogInfo(petId)
+                val dogInfoQuery = DogInfoDbManager.queryDogInfo(dogItem.petID)
                 if (dogInfoQuery != null) {
                     val dogInfo = dogInfoTranslate(dogInfoQuery)
                     DogInfoDbManager.saveOrUpdateDogInfo(dogInfo)
+                    dogInfo.imageURLStr = dogItem.coverURL
                     dogInfo.imageURL = DogInfoDbManager.queryImageUrlList(dogInfo.petID)
                     it.onNext(dogInfo)
                 } else {
@@ -62,16 +64,17 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ dogInfo ->
+                dogInfo.imageURLStr = dogItem.coverURL
                 view.showDogInfo(dogInfo)
             }, {
-                getDogDetailOnNet(petId)
+                getDogDetailOnNet(dogItem)
             })
     }
 
-    private fun getDogDetailOnNet(petId: Int) {
-        model.queryDogInfo(petId, { rsp ->
+    private fun getDogDetailOnNet(dogItem: DogItem) {
+        model.queryDogInfo(dogItem.petID, { rsp ->
             if (rsp != null && rsp.isSuccess && rsp.result != null) {
-              formatDogInfo(rsp.result)
+              formatDogInfo(dogItem,rsp.result)
             } else {
                 callbackRspFailure(rsp, view)
             }
@@ -82,7 +85,7 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
     }
 
     @SuppressLint("CheckResult")
-    private fun formatDogInfo(dogInfo: DogInfo){
+    private fun formatDogInfo(dogItem: DogItem,dogInfo: DogInfo){
         Observable.create<DogInfo> {
             if (!it.isDisposed){
                 val dogInfoTr = dogInfoTranslate(dogInfo)
@@ -93,6 +96,7 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe{
+                dogInfo.imageURLStr = dogItem.coverURL
                 view.showDogInfo(it)
             }
     }
@@ -100,29 +104,21 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
     private fun dogInfoTranslate(dogInfo: DogInfo): DogInfo {
         return dogInfo.apply {
             enCharacter = translate(enCharacter, character)
-            SystemClock.sleep(1000)
             enNation = translate(enNation, nation)
-            SystemClock.sleep(1000)
             enEasyOfDisease = translate(enEasyOfDisease, easyOfDisease)
-            SystemClock.sleep(1000)
             enLife = translate(enLife, life)
-            SystemClock.sleep(1000)
             enPrice = translate(enPrice, price)
-            SystemClock.sleep(1000)
             enDes = translate(enDes, des)
-            SystemClock.sleep(1000)
             enFeature = translate(enFeature, feature)
-            SystemClock.sleep(1000)
             enCharacterFeature = translate(enCharacterFeature, characterFeature)
-            SystemClock.sleep(1000)
             enCareKnowledge = translate(enCareKnowledge, careKnowledge)
-            SystemClock.sleep(1000)
             enFeedPoints = translate(enFeedPoints, feedPoints)
         }
     }
 
     private fun translate(en: String?, cn: String?): String? {
         return if (en.isNullOrEmpty()) {
+            SystemClock.sleep(1000)
             val transResultJson = transApi.getTransResult(cn, "zh", "en")
             val transResult = GsonUtils.fromJson(transResultJson, TranslateResult::class.java)
             val transResultList= transResult?.trans_result
