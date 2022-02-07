@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.homework.lovedog.activity.DogInfoActivity
 import com.homework.lovedog.adapter.MainDogListAdapter
 import com.homework.lovedog.bean.DogInfo
-import com.homework.lovedog.bean.DogList
+import com.homework.lovedog.bean.DogItem
 import com.homework.lovedog.databinding.ActivityMainBinding
 import com.homework.lovedog.presenter.MainPresenter
 import com.homework.lovedog.utils.MMKVUtils
@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity(), IMainView {
     private lateinit var mViewBinding: ActivityMainBinding
     private lateinit var presenter: MainPresenter
     private lateinit var adapter: MainDogListAdapter
-    private val dogList = mutableListOf<DogList>()
+    private val dogList = mutableListOf<DogItem>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mViewBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity(), IMainView {
         return this
     }
 
-    override fun showDogList(dogList: MutableList<DogList>?) {
+    override fun showDogList(dogList: MutableList<DogItem>?) {
         mViewBinding.refreshLayout.finishLoadMore()
         mViewBinding.refreshLayout.finishRefresh()
         adapter.loadMoreData(dogList)
@@ -144,7 +144,8 @@ class MainActivity : AppCompatActivity(), IMainView {
         val intent = Intent(this@MainActivity, DogInfoActivity::class.java)
         val bundle = Bundle()
         bundle.putParcelable("dog_info",dogInfo)
-        startActivity(intent,bundle)
+        intent.putExtras(bundle)
+        startActivity(intent)
     }
 
 

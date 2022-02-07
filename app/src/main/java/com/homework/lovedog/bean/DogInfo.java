@@ -87,7 +87,7 @@ public class DogInfo implements Parcelable {
    private String enFeedPoints;
    private List<String> imageURL;
    @Column(name = COLUMN_IMAGE_URL_JSON)
-   private String imageURLJson;
+   private String imageURLStr;
 
    protected DogInfo(Parcel in) {
       petID = in.readInt();
@@ -114,7 +114,7 @@ public class DogInfo implements Parcelable {
       feedPoints = in.readString();
       enFeedPoints = in.readString();
       imageURL = in.createStringArrayList();
-      imageURLJson = in.readString();
+      imageURLStr = in.readString();
    }
 
    @Override
@@ -143,7 +143,7 @@ public class DogInfo implements Parcelable {
       dest.writeString(feedPoints);
       dest.writeString(enFeedPoints);
       dest.writeStringList(imageURL);
-      dest.writeString(imageURLJson);
+      dest.writeString(imageURLStr);
    }
 
    @Override
@@ -355,11 +355,11 @@ public class DogInfo implements Parcelable {
       this.enFeedPoints = enFeedPoints;
    }
 
-   public String getImageURLJson() {
-      return imageURLJson;
+   public String getImageURLStr() {
+      return imageURLStr;
    }
 
-   public void setImageURLJson(String imageURLJson) {
-      this.imageURLJson = imageURLJson;
+   public void setImageURLStr(String imageURLStr) {
+      this.imageURLStr = imageURLStr;
    }
 }

@@ -15,6 +15,7 @@ import com.homework.lovedog.view.IMainView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.json.JSONArray
 import rxhttp.wrapper.utils.GsonUtil
 
 class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
@@ -51,7 +52,7 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
                 if (dogInfoQuery != null) {
                     val dogInfo = dogInfoTranslate(dogInfoQuery)
                     DogInfoDbManager.saveOrUpdateDogInfo(dogInfo)
-                    dogInfo.imageURL = GsonUtils.jsonToArrayList(dogInfo.imageURLJson,String::class.java)
+                    dogInfo.imageURL = DogInfoDbManager.queryImageUrlList(dogInfo.petID)
                     it.onNext(dogInfo)
                 } else {
                     it.onError(Throwable("get info on net"))
@@ -84,8 +85,8 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
         Observable.create<DogInfo> {
             if (!it.isDisposed){
                 val dogInfoTr = dogInfoTranslate(dogInfo)
-                dogInfoTr.imageURLJson = GsonUtils.toJsonStr(dogInfoTr.imageURL)
                 DogInfoDbManager.saveOrUpdateDogInfo(dogInfoTr)
+                DogInfoDbManager.saveImageUrlList(dogInfoTr.petID,dogInfoTr.imageURL)
                 it.onNext(dogInfoTr)
             }
         }.subscribeOn(Schedulers.io())

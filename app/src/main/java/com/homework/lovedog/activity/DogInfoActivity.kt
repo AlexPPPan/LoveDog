@@ -17,22 +17,22 @@ class DogInfoActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityDogInfoLayoutBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
+        viewBinding.backRtv.setOnClickListener(this)
         initData()
     }
+
 
     private fun initData() {
         val bundle = intent.extras
         val dogInfo = bundle?.getParcelable<DogInfo>("dog_info")
         dogInfo?.apply {
-            if (imageURL!=null&&imageURL.size>0){
-                Glide.with(baseContext).load(imageURL[0]).into(viewBinding.headIconRiv)
-            }
-            viewBinding.titleTv.text = StringFormatUtils.defaultValueFormat(engName,"")
-            viewBinding.nameTv.text = StringFormatUtils.defaultValueFormat(engName,name)
+            Glide.with(baseContext).load(dogInfo.imageURLStr).into(viewBinding.headIconRiv)
+            viewBinding.titleTv.text = StringFormatUtils.defaultValueFormat(engName, "")
+            viewBinding.nameTv.text = StringFormatUtils.defaultValueFormat(engName, name)
             viewBinding.nationTv.text = StringFormatUtils
-                .defaultValueFormat("Nation:$enNation","Nation:$nation")
+                .defaultValueFormat("Nation:$enNation", "Nation:$nation")
             viewBinding.lifeTv.text = StringFormatUtils
-                .defaultValueFormat("Lift:$enLife","Lift:$life")
+                .defaultValueFormat("Lift:$enLife", "Lift:$life")
 
         }
 
