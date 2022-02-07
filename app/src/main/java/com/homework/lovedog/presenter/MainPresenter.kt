@@ -1,6 +1,7 @@
 package com.homework.lovedog.presenter
 
 import android.annotation.SuppressLint
+import android.os.SystemClock
 import android.util.Log
 import com.homework.lovedog.base.BasePresenter
 import com.homework.lovedog.bean.DogInfo
@@ -99,14 +100,23 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
     private fun dogInfoTranslate(dogInfo: DogInfo): DogInfo {
         return dogInfo.apply {
             enCharacter = translate(enCharacter, character)
+            SystemClock.sleep(1000)
             enNation = translate(enNation, nation)
+            SystemClock.sleep(1000)
             enEasyOfDisease = translate(enEasyOfDisease, easyOfDisease)
+            SystemClock.sleep(1000)
             enLife = translate(enLife, life)
+            SystemClock.sleep(1000)
             enPrice = translate(enPrice, price)
+            SystemClock.sleep(1000)
             enDes = translate(enDes, des)
+            SystemClock.sleep(1000)
             enFeature = translate(enFeature, feature)
+            SystemClock.sleep(1000)
             enCharacterFeature = translate(enCharacterFeature, characterFeature)
+            SystemClock.sleep(1000)
             enCareKnowledge = translate(enCareKnowledge, careKnowledge)
+            SystemClock.sleep(1000)
             enFeedPoints = translate(enFeedPoints, feedPoints)
         }
     }

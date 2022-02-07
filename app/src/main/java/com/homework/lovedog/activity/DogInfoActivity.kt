@@ -29,14 +29,20 @@ class DogInfoActivity : BaseActivity() {
             Glide.with(baseContext).load(dogInfo.imageURLStr).into(viewBinding.headIconRiv)
             viewBinding.titleTv.text = StringFormatUtils.defaultValueFormat(engName, "")
             viewBinding.nameTv.text = StringFormatUtils.defaultValueFormat(engName, name)
-            viewBinding.nationTv.text = StringFormatUtils
-                .defaultValueFormat("Nation:$enNation", "Nation:$nation")
-            viewBinding.lifeTv.text = StringFormatUtils
-                .defaultValueFormat("Lift:$enLife", "Lift:$life")
-
+            viewBinding.nationTv.text = StringFormatUtils.defaultValueFormat(enNation, nation)
+            viewBinding.lifeTv.text = StringFormatUtils.defaultValueFormat(enLife, life)
+            viewBinding.characterTv.text = StringFormatUtils.defaultValueFormat(enCharacter,character)
+            viewBinding.easyOfDiseaseTv.text = StringFormatUtils
+                .defaultValueFormat(enEasyOfDisease,enEasyOfDisease)
+            viewBinding.priceTv.text = StringFormatUtils.defaultValueFormat(enPrice,price)
+            viewBinding.desTv.text = StringFormatUtils.defaultValueFormat(enDes,des)
+            viewBinding.featureTv.text = StringFormatUtils.defaultValueFormat(enFeature,feature)
+            viewBinding.characterFeatureTv.text = StringFormatUtils
+                .defaultValueFormat(enCharacterFeature,characterFeature)
+            viewBinding.careKnowledgeTv.text = StringFormatUtils
+                .defaultValueFormat(enCareKnowledge,careKnowledge)
+            viewBinding.feedPointsTv.text = StringFormatUtils.defaultValueFormat(enFeedPoints,feedPoints)
         }
-
-
     }
 
     override fun onClick(p0: View?) {
