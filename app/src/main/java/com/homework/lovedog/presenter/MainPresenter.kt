@@ -10,32 +10,57 @@ import com.homework.lovedog.bean.RspDogList
 import com.homework.lovedog.bean.TranslateResult
 import com.homework.lovedog.dbmanager.DogInfoDbManager
 import com.homework.lovedog.model.MainModel
-import com.homework.lovedog.utils.GoogleTranslateUtil
 import com.homework.lovedog.utils.GsonUtils
 import com.homework.lovedog.utils.translate.TransApi
 import com.homework.lovedog.view.IMainView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import org.json.JSONArray
-import rxhttp.wrapper.utils.GsonUtil
 
 class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
-   private val model: MainModel = MainModel(view.getViewLifecycleOwner())
-   private var page = 1
-   private var pageSize = 30;
-   private val transApi:TransApi = TransApi("20220209001077870","lamns9ir2ZaDApJU4gdp")
-
+    private val model: MainModel = MainModel(view.getViewLifecycleOwner())
+    private var page = 1
+    private var pageSize = 30;
+    private val transApi: TransApi = TransApi("20220209001077870", "lamns9ir2ZaDApJU4gdp")
 
 
     override fun queryDogList(allFresh: Boolean) {
         if (allFresh) {
             page = 1
         }
+        getDogItemFromDb()
+    }
+
+    @SuppressLint("CheckResult")
+    private fun getDogItemFromDb() {
+        Observable.create<MutableList<DogItem>> {
+            if (!it.isDisposed) {
+                val dogItemQuery = DogInfoDbManager.queryDogItemList(page, pageSize)
+                if (dogItemQuery != null)
+                    it.onNext(dogItemQuery)
+                else
+                    it.onError(Throwable("get null from db"))
+            }
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                page++
+                view.showDogList(it)
+            }, {
+                getDogItemFromNet()
+            })
+    }
+
+    private fun getDogItemFromNet() {
         model.queryDogList(page, pageSize, { rsp: RspDogList? ->
             if (rsp != null && rsp.isSuccess) {
-                page++
-                view.showDogList(rsp.result?.petFamilyList)
+               val dogItemList = rsp.result?.petFamilyList
+                if (dogItemList != null && dogItemList.size > 0){
+                    page++
+                    formatDogItem(dogItemList)
+                }else{
+                    view.showDogList(dogItemList)
+                }
             } else {
                 callbackRspFailure(rsp, view)
             }
@@ -43,7 +68,24 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
             requestError(it, view)
             Log.e("TAG", it.message + "")
         })
+    }
 
+    @SuppressLint("CheckResult")
+    private fun formatDogItem(dogItemList: MutableList<DogItem>){
+        Observable.create<MutableList<DogItem>> {
+            if (!it.isDisposed){
+                dogItemList.forEach { dogItem ->
+                    dogItem.apply {
+                        engName = translate(engName,name)
+                        enPrice = translate(enPrice,price)
+                    }
+                }
+                DogInfoDbManager.saveDogItemList(dogItemList)
+                it.onNext(dogItemList)
+            }
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { view.showDogList(it) }
     }
 
     @SuppressLint("CheckResult")
@@ -58,14 +100,14 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
                     dogInfo.imageURL = DogInfoDbManager.queryImageUrlList(dogInfo.petID)
                     it.onNext(dogInfo)
                 } else {
-                    it.onError(Throwable("get info on net"))
+                    it.onError(Throwable("get null from db"))
                 }
             }
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ dogInfo ->
-                dogInfo.imageURLStr = dogItem.coverURL
-                view.showDogInfo(dogInfo)
+            .subscribe({
+                it.imageURLStr = dogItem.coverURL
+                view.showDogInfo(it)
             }, {
                 getDogDetailOnNet(dogItem)
             })
@@ -74,7 +116,7 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
     private fun getDogDetailOnNet(dogItem: DogItem) {
         model.queryDogInfo(dogItem.petID, { rsp ->
             if (rsp != null && rsp.isSuccess && rsp.result != null) {
-              formatDogInfo(dogItem,rsp.result)
+                formatDogInfo(dogItem, rsp.result)
             } else {
                 callbackRspFailure(rsp, view)
             }
@@ -85,17 +127,17 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
     }
 
     @SuppressLint("CheckResult")
-    private fun formatDogInfo(dogItem: DogItem,dogInfo: DogInfo){
+    private fun formatDogInfo(dogItem: DogItem, dogInfo: DogInfo) {
         Observable.create<DogInfo> {
-            if (!it.isDisposed){
+            if (!it.isDisposed) {
                 val dogInfoTr = dogInfoTranslate(dogInfo)
                 DogInfoDbManager.saveOrUpdateDogInfo(dogInfoTr)
-                DogInfoDbManager.saveImageUrlList(dogInfoTr.petID,dogInfoTr.imageURL)
+                DogInfoDbManager.saveImageUrlList(dogInfoTr.petID, dogInfoTr.imageURL)
                 it.onNext(dogInfoTr)
             }
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe{
+            .subscribe {
                 dogInfo.imageURLStr = dogItem.coverURL
                 view.showDogInfo(it)
             }
@@ -103,6 +145,7 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
 
     private fun dogInfoTranslate(dogInfo: DogInfo): DogInfo {
         return dogInfo.apply {
+            engName = translate(engName, name)
             enCharacter = translate(enCharacter, character)
             enNation = translate(enNation, nation)
             enEasyOfDisease = translate(enEasyOfDisease, easyOfDisease)
@@ -121,18 +164,18 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
             SystemClock.sleep(1000)
             val transResultJson = transApi.getTransResult(cn, "zh", "en")
             val transResult = GsonUtils.fromJson(transResultJson, TranslateResult::class.java)
-            val transResultList= transResult?.trans_result
-            if (transResultList!=null&&transResultList.size>0){
+            val transResultList = transResult?.trans_result
+            if (transResultList != null && transResultList.size > 0) {
                 val stringBuilder = StringBuffer()
                 transResultList.forEach {
                     stringBuilder.append(it.dst)
                 }
                 stringBuilder.toString()
-            }else{
+            } else {
                 en
             }
-        }
-        else en
+        } else en
     }
+
 
 }

@@ -30,23 +30,23 @@ class DogInfoActivity : BaseActivity() {
         dogInfo = bundle?.getParcelable<DogInfo>("dog_info")
         dogInfo?.apply {
             Glide.with(baseContext).load(imageURLStr).into(viewBinding.headIconRiv)
-            viewBinding.titleTv.text = StringFormatUtils.defaultValueFormat(engName, "")
-            viewBinding.nameTv.text = StringFormatUtils.defaultValueFormat(engName, name)
-            viewBinding.nationTv.text = StringFormatUtils.defaultValueFormat(enNation, nation)
-            viewBinding.lifeTv.text = StringFormatUtils.defaultValueFormat(enLife, life)
+            viewBinding.titleTv.text = StringFormatUtils.defaultValueFormat(engName, "")?:"unknown"
+            viewBinding.nameTv.text = StringFormatUtils.defaultValueFormat(engName, name)?:"unknown"
+            viewBinding.nationTv.text = StringFormatUtils.defaultValueFormat(enNation, nation)?:"unknown"
+            viewBinding.lifeTv.text = StringFormatUtils.defaultValueFormat(enLife, life)?:"unknown"
             viewBinding.characterTv.text =
-                StringFormatUtils.defaultValueFormat(enCharacter, character)
+                StringFormatUtils.defaultValueFormat(enCharacter, character)?:"unknown"
             viewBinding.easyOfDiseaseTv.text = StringFormatUtils
-                .defaultValueFormat(enEasyOfDisease, enEasyOfDisease)
-            viewBinding.priceTv.text = StringFormatUtils.defaultValueFormat(enPrice, price)
-            viewBinding.desTv.text = StringFormatUtils.defaultValueFormat(enDes, des)
-            viewBinding.featureTv.text = StringFormatUtils.defaultValueFormat(enFeature, feature)
+                .defaultValueFormat(enEasyOfDisease, enEasyOfDisease)?:"unknown"
+            viewBinding.priceTv.text = StringFormatUtils.defaultValueFormat(enPrice, price)?:"unknown"
+            viewBinding.desTv.text = StringFormatUtils.defaultValueFormat(enDes, des)?:"unknown"
+            viewBinding.featureTv.text = StringFormatUtils.defaultValueFormat(enFeature, feature)?:"unknown"
             viewBinding.characterFeatureTv.text = StringFormatUtils
-                .defaultValueFormat(enCharacterFeature, characterFeature)
+                .defaultValueFormat(enCharacterFeature, characterFeature)?:"unknown"
             viewBinding.careKnowledgeTv.text = StringFormatUtils
-                .defaultValueFormat(enCareKnowledge, careKnowledge)
+                .defaultValueFormat(enCareKnowledge, careKnowledge)?:"unknown"
             viewBinding.feedPointsTv.text =
-                StringFormatUtils.defaultValueFormat(enFeedPoints, feedPoints)
+                StringFormatUtils.defaultValueFormat(enFeedPoints, feedPoints)?:"unknown"
         }
     }
 

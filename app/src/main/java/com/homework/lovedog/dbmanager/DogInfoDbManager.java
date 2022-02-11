@@ -2,11 +2,13 @@ package com.homework.lovedog.dbmanager;
 
 
 import com.homework.lovedog.bean.DogInfo;
+import com.homework.lovedog.bean.DogItem;
 import com.homework.lovedog.bean.ImageUrl;
 import com.homework.lovedog.utils.MMKVUtils;
 import com.homework.lovedog.utils.dbutils.DBUtils;
 import com.homework.lovedog.utils.dbutils.DbManager;
 import com.homework.lovedog.utils.dbutils.db.sqlite.WhereBuilder;
+import com.homework.lovedog.utils.dbutils.ex.DbException;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,11 +42,7 @@ public class DogInfoDbManager {
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                    try {
-                        dogInfoDb.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    closeDb(dogInfoDb);
                 }
             }
         }
@@ -60,11 +58,7 @@ public class DogInfoDbManager {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                try {
-                    dogInfoDb.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                closeDb(dogInfoDb);
             }
         }
         return null;
@@ -86,11 +80,7 @@ public class DogInfoDbManager {
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                    try {
-                        dogInfoDb.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    closeDb(dogInfoDb);
                 }
             }
         }
@@ -111,15 +101,59 @@ public class DogInfoDbManager {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                try {
-                    dogInfoDb.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                closeDb(dogInfoDb);
             }
 
         }
         return imageUrlArr;
+    }
+
+
+    public static void saveDogItemList(List<DogItem> dogItemList) {
+        if (dogItemList != null && dogItemList.size() > 0) {
+            DbManager dogInfoDb = getDogInfoDb();
+            if (dogInfoDb != null) {
+                for (DogItem dogItem : dogItemList) {
+                    try {
+                        DogItem dogItemQuery = dogInfoDb.selector(DogItem.class)
+                            .where(DogItem.COLUMN_COVER_URL, "=", dogItem.getCoverURL())
+                            .findFirst();
+                        if (dogItemQuery != null) {
+                            dogItem.setId(dogItemQuery.getId());
+                        }
+                        dogInfoDb.saveOrUpdate(dogItem);
+                    } catch (DbException e) {
+                        e.printStackTrace();
+                    } finally {
+                        closeDb(dogInfoDb);
+                    }
+                }
+            }
+        }
+    }
+
+    public static List<DogItem> queryDogItemList(int page, int pageSize) {
+        DbManager dogInfoDb = getDogInfoDb();
+        if (dogInfoDb != null) {
+            try {
+                return dogInfoDb.selector(DogItem.class).limit(pageSize).offset(page).findAll();
+            } catch (DbException e) {
+                e.printStackTrace();
+            } finally {
+                closeDb(dogInfoDb);
+            }
+        }
+        return null;
+    }
+
+    private static void closeDb(DbManager db) {
+        if (db != null) {
+            try {
+                db.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

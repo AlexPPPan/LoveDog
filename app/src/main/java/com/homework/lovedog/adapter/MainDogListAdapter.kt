@@ -26,8 +26,8 @@ class MainDogListAdapter(context: Context?, data: MutableList<DogItem>?) :
             t?.apply {
                 Glide.with(mContext).load(coverURL).placeholder(R.drawable.dog_icon)
                         .error(R.drawable.dog_icon).into(dogImageIv)
-                dogNameTv.text = StringFormatUtils.defaultValueFormat(engName,"Dog")
-                dogPriceTv.text = "Price:￥${StringFormatUtils.defaultValueFormat(price,"")}"
+                dogNameTv.text = StringFormatUtils.defaultValueFormat(engName,"unknown")
+                dogPriceTv.text = "Price:￥${StringFormatUtils.defaultValueFormat(price,"unknown")}"
             }
 
         }
