@@ -30,24 +30,23 @@ class DogInfoActivity : BaseActivity() {
         dogInfo = bundle?.getParcelable<DogInfo>("dog_info")
         dogInfo?.apply {
             Glide.with(baseContext).load(imageURLStr).into(viewBinding.headIconRiv)
-            viewBinding.titleTv.text = StringFormatUtils.defaultValueFormat(engName, "")?:"unknown"
-            viewBinding.nameTv.text = StringFormatUtils.defaultValueFormat(engName, name)?:"unknown"
-            viewBinding.nationTv.text = StringFormatUtils.defaultValueFormat(enNation, nation)?:"unknown"
-            viewBinding.lifeTv.text = StringFormatUtils.defaultValueFormat(enLife, life)?:"unknown"
-            viewBinding.characterTv.text =
-                StringFormatUtils.defaultValueFormat(enCharacter, character)?:"unknown"
-            viewBinding.easyOfDiseaseTv.text = StringFormatUtils
-                .defaultValueFormat(enEasyOfDisease, enEasyOfDisease)?:"unknown"
-            viewBinding.priceTv.text = StringFormatUtils.defaultValueFormat(enPrice, price)?:"unknown"
-            viewBinding.desTv.text = StringFormatUtils.defaultValueFormat(enDes, des)?:"unknown"
-            viewBinding.featureTv.text = StringFormatUtils.defaultValueFormat(enFeature, feature)?:"unknown"
-            viewBinding.characterFeatureTv.text = StringFormatUtils
-                .defaultValueFormat(enCharacterFeature, characterFeature)?:"unknown"
-            viewBinding.careKnowledgeTv.text = StringFormatUtils
-                .defaultValueFormat(enCareKnowledge, careKnowledge)?:"unknown"
-            viewBinding.feedPointsTv.text =
-                StringFormatUtils.defaultValueFormat(enFeedPoints, feedPoints)?:"unknown"
+            viewBinding.titleTv.text = formatValue(engName, "")
+            viewBinding.nameTv.text = formatValue(engName, name)
+            viewBinding.nationTv.text = formatValue(enNation, nation)
+            viewBinding.lifeTv.text = formatValue(enLife, life)
+            viewBinding.characterTv.text = formatValue(enCharacter, character)
+            viewBinding.easyOfDiseaseTv.text = formatValue(enEasyOfDisease, enEasyOfDisease)
+            viewBinding.priceTv.text = formatValue(enPrice, price)
+            viewBinding.desTv.text = formatValue(enDes, des)
+            viewBinding.featureTv.text = formatValue(enFeature, feature)
+            viewBinding.characterFeatureTv.text = formatValue(enCharacterFeature, characterFeature)
+            viewBinding.careKnowledgeTv.text = formatValue(enCareKnowledge, careKnowledge)
+            viewBinding.feedPointsTv.text = formatValue(enFeedPoints, feedPoints)
         }
+    }
+
+    private fun formatValue(valueStr: String?, defaultValue: String?): String {
+        return (valueStr ?: defaultValue) ?: "unknown"
     }
 
     override fun onClick(p0: View?) {

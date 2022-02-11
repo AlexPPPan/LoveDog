@@ -33,6 +33,10 @@ class MainDogListAdapter(context: Context?, data: MutableList<DogItem>?) :
         }
     }
 
+    private fun formatValue(valueStr: String?, defaultValue: String?): String {
+        return (valueStr ?: defaultValue) ?: "unknown"
+    }
+
     private lateinit var onItemClickListener: OnItemClickListener
     fun setOnItemClickListener(listener: OnItemClickListener) {
         this.onItemClickListener = listener
