@@ -113,8 +113,8 @@ public class DogInfoDbManager {
         if (dogItemList != null && dogItemList.size() > 0) {
             DbManager dogInfoDb = getDogInfoDb();
             if (dogInfoDb != null) {
-                for (DogItem dogItem : dogItemList) {
-                    try {
+                try {
+                    for (DogItem dogItem : dogItemList) {
                         DogItem dogItemQuery = dogInfoDb.selector(DogItem.class)
                             .where(DogItem.COLUMN_COVER_URL, "=", dogItem.getCoverURL())
                             .findFirst();
@@ -122,11 +122,11 @@ public class DogInfoDbManager {
                             dogItem.setId(dogItemQuery.getId());
                         }
                         dogInfoDb.saveOrUpdate(dogItem);
-                    } catch (DbException e) {
-                        e.printStackTrace();
-                    } finally {
-                        closeDb(dogInfoDb);
                     }
+                } catch (DbException e) {
+                    e.printStackTrace();
+                } finally {
+                    closeDb(dogInfoDb);
                 }
             }
         }
@@ -136,7 +136,8 @@ public class DogInfoDbManager {
         DbManager dogInfoDb = getDogInfoDb();
         if (dogInfoDb != null) {
             try {
-                return dogInfoDb.selector(DogItem.class).limit(pageSize).offset(page).findAll();
+                int offset = pageSize * (page > 0 ? page - 1 : 0);
+                return dogInfoDb.selector(DogItem.class).limit(pageSize).offset(offset).findAll();
             } catch (DbException e) {
                 e.printStackTrace();
             } finally {

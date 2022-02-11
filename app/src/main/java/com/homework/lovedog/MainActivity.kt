@@ -41,15 +41,13 @@ class MainActivity : AppCompatActivity(), IMainView {
         StatusBarUtil.setDarkMode(this)
         adapter = if (!::adapter.isInitialized) {
             MainDogListAdapter(this, dogList)
-
         } else {
             adapter
         }
 
         adapter.setOnItemClickListener(object : MainDogListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-
-                CustomProgress.show(getActivity(), "Loading...", false, false, null)
+                showLoadingProgress()
                 presenter.getDogDetail(adapter.getItem(position))
             }
 
@@ -65,9 +63,12 @@ class MainActivity : AppCompatActivity(), IMainView {
             presenter
         }
         mViewBinding.refreshLayout.setOnLoadMoreListener {
+            showLoadingProgress()
             presenter.queryDogList(false)
         }
         mViewBinding.refreshLayout.setOnRefreshListener {
+            showLoadingProgress()
+            adapter.clearData()
             presenter.queryDogList(true)
         }
         PermissionX.init(this).permissions(
@@ -132,6 +133,7 @@ class MainActivity : AppCompatActivity(), IMainView {
     }
 
     override fun showDogList(dogList: MutableList<DogItem>?) {
+        CustomProgress.dismissDialog()
         mViewBinding.refreshLayout.finishLoadMore()
         mViewBinding.refreshLayout.finishRefresh()
         adapter.loadMoreData(dogList)
@@ -146,5 +148,8 @@ class MainActivity : AppCompatActivity(), IMainView {
         startActivity(intent)
     }
 
+    private fun showLoadingProgress() {
+        CustomProgress.show(getActivity(), "Loading...", false, false, null)
+    }
 
 }
