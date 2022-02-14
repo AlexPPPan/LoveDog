@@ -5,7 +5,7 @@ import com.homework.lovedog.utils.dbutils.DbManager;
 import com.homework.lovedog.utils.dbutils.db.annotation.Column;
 import com.homework.lovedog.utils.dbutils.db.annotation.Table;
 
-@Table(name = DogInfoDbManager.DOG_INFO_TABLE)
+@Table(name = DogInfoDbManager.DOG_ITEM_TABLE)
 public class DogItem {
 
     public static final String COLUMN_ID = "id";
