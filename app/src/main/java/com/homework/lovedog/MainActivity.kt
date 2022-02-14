@@ -105,6 +105,7 @@ class MainActivity : AppCompatActivity(), IMainView {
                         dbFile.mkdir()
                     MMKVUtils.saveDbPath(dbFile.path)
                     adapter.clearData()
+                    showLoadingProgress()
                     presenter.queryDogList(true)
                 } else {
                     Toast.makeText(

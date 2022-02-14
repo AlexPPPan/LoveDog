@@ -18,6 +18,7 @@ import java.util.List;
 public class DogInfoDbManager {
     public static final String DOG_INFO_DB = "DogInfo.db";
     public static final String DOG_INFO_TABLE = "dog_info";
+    public static final String DOG_ITEM_TABLE = "dog_item";
     public static final String IMAGE_URL_TABLE = "image_url";
 
     public static String getResourceDbPath() {

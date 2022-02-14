@@ -36,7 +36,7 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
         Observable.create<MutableList<DogItem>> {
             if (!it.isDisposed) {
                 val dogItemQuery = DogInfoDbManager.queryDogItemList(page, pageSize)
-                if (dogItemQuery != null)
+                if (dogItemQuery != null&&dogItemQuery.size>0)
                     it.onNext(dogItemQuery)
                 else
                     it.onError(Throwable("get null from db"))
