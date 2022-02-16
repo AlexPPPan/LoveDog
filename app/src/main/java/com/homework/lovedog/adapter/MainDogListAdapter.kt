@@ -2,37 +2,49 @@ package com.homework.lovedog.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.drawable.Drawable
+import android.view.View
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.model.GlideUrl
-import com.bumptech.glide.load.model.LazyHeaders
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.homework.lovedog.R
 import com.homework.lovedog.base.BaseViewHolder
 import com.homework.lovedog.base.SimpleRecyclerViewAdapter
-import com.homework.lovedog.bean.DogList
+import com.homework.lovedog.bean.DogItem
 import com.homework.lovedog.databinding.ItemMainDogListLayoutBinding
 import com.homework.lovedog.utils.StringFormatUtils
-import com.squareup.picasso.Picasso
 
 
-class MainDogListAdapter(context: Context?, datas: MutableList<DogList>?) :
-        SimpleRecyclerViewAdapter<DogList>(context, datas, R.layout.item_main_dog_list_layout) {
+class MainDogListAdapter(context: Context?, data: MutableList<DogItem>?) :
+        SimpleRecyclerViewAdapter<DogItem>(context, data, R.layout.item_main_dog_list_layout) {
+
+
     @SuppressLint("SetTextI18n")
-    override fun bindViewHolder(holder: BaseViewHolder, t: DogList?, position: Int) {
+    override fun bindViewHolder(holder: BaseViewHolder, t: DogItem?, position: Int) {
        val viewBinding = ItemMainDogListLayoutBinding.bind(holder.itemView)
-
+        holder.itemView.setOnClickListener {
+            onItemClickListener.onItemClick(holder.itemView,position)
+        }
         viewBinding.apply {
             t?.apply {
                 Glide.with(mContext).load(coverURL).placeholder(R.drawable.dog_icon)
                         .error(R.drawable.dog_icon).into(dogImageIv)
-                dogNameTv.text = StringFormatUtils.defaultValueFormat(engName,"Dog")
-                dogPriceTv.text = "Price:￥${StringFormatUtils.defaultValueFormat(price,"")}"
+                dogNameTv.text = StringFormatUtils.defaultValueFormat(engName,"unknown")
+                dogPriceTv.text = "Price:\n${StringFormatUtils
+                    .defaultValueFormat(enPrice,"unknown")}"
             }
-
         }
     }
+
+    private fun formatValue(valueStr: String?, defaultValue: String?): String {
+        return (valueStr ?: defaultValue) ?: "unknown"
+    }
+
+    private lateinit var onItemClickListener: OnItemClickListener
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.onItemClickListener = listener
+    }
+    interface OnItemClickListener{
+        fun onItemClick(view: View, position: Int)
+        fun onItemLongClick(view: View, position: Int)
+    }
+
+
 }
