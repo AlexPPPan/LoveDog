@@ -10,6 +10,7 @@ import com.homework.lovedog.R;
 import com.homework.lovedog.activity.data.LoginRepository;
 import com.homework.lovedog.activity.data.Result;
 import com.homework.lovedog.activity.data.model.LoggedInUser;
+import com.homework.lovedog.utils.MMKVUtils;
 
 
 public class LoginViewModel extends ViewModel {
@@ -36,6 +37,7 @@ public class LoginViewModel extends ViewModel {
 
         if (result instanceof Result.Success) {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
+            MMKVUtils.INSTANCE.saveLoginUser(data.getUserId());
             loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
         } else {
             loginResult.setValue(new LoginResult(R.string.login_failed));

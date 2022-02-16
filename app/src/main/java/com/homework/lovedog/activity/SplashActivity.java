@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.homework.lovedog.MainActivity;
@@ -11,6 +12,7 @@ import com.homework.lovedog.R;
 import com.homework.lovedog.activity.ui.login.LoginActivity;
 import com.homework.lovedog.base.BaseActivity;
 import com.homework.lovedog.databinding.ActivitySplashLayoutBinding;
+import com.homework.lovedog.utils.MMKVUtils;
 import com.leaf.library.StatusBarUtil;
 
 import androidx.annotation.Nullable;
@@ -34,7 +36,12 @@ public class SplashActivity extends BaseActivity {
             ActivitySplashLayoutBinding.inflate(getLayoutInflater());
         setContentView(inflate.getRoot());
         new Handler().postDelayed(() -> runOnUiThread(() -> {
-            Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+            Intent intent;
+            if(TextUtils.isEmpty(MMKVUtils.INSTANCE.getLoginUser())) {
+                intent = new Intent(SplashActivity.this, LoginActivity.class);
+            }else {
+                intent = new Intent(SplashActivity.this, MainActivity.class);
+            }
             startActivity(intent);
             finish();
         }),1000);

@@ -104,5 +104,12 @@ object MMKVUtils {
         return decodeString("db_path")
     }
 
+    fun saveLoginUser(userName:String){
+        encode("user_name",userName)
+    }
+
+    fun getLoginUser():String?{
+        return decodeString("user_name")
+    }
 
 }
