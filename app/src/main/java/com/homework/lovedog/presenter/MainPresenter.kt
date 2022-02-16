@@ -20,7 +20,7 @@ import io.reactivex.schedulers.Schedulers
 class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
     private val model: MainModel = MainModel(view.getViewLifecycleOwner())
     private var page = 1
-    private var pageSize = 10;
+    private var pageSize = 5;
     private val transApi: TransApi = TransApi("20220216001084823", "QGmC2nQM1SykPrgAiLzH")
 
 
