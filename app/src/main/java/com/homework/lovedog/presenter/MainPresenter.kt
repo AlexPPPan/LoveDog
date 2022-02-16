@@ -21,7 +21,7 @@ class MainPresenter(val view: IMainView) : BasePresenter(), IMainPresenter {
     private val model: MainModel = MainModel(view.getViewLifecycleOwner())
     private var page = 1
     private var pageSize = 10;
-    private val transApi: TransApi = TransApi("20220209001077870", "lamns9ir2ZaDApJU4gdp")
+    private val transApi: TransApi = TransApi("20220216001084823", "QGmC2nQM1SykPrgAiLzH")
 
 
     override fun queryDogList(allFresh: Boolean) {
